@@ -9,25 +9,27 @@ class kalman_filter:
     
     # TODO Part 3: Initialize the covariances and the states    
     def __init__(self, P,Q,R, x, dt):
-        
-        self.P=...
-        self.Q=...
-        self.R=...
-        self.x=...
-        self.dt = ...
+        # just initialize what is passed into the function
+        self.P=P
+        self.Q=Q
+        self.R=R
+        self.x=x
+        self.dt = dt
         
     # TODO Part 3: Replace the matrices with Jacobians where needed        
     def predict(self):
-
-        self.A = ...
-        self.C = ...
+        # set each matrix to the jacobian based on the associated function
+        self.A = self.jacobian_A()
+        self.C = self.jacobian_H()
         
+        # execute the motion model
         self.motion_model()
-        
-        self.P= np.dot( np.dot(self.A, self.P), self.A.T) + self.Q
+        # calculate the predicted covariance based on the second line of the EKF algorithm (given code)
+        self.P= np.dot( np.dot(self.A, self.P), self.A.T) + self.Q 
 
     # TODO Part 3: Replace the matrices with Jacobians where needed
     def update(self, z):
+        # everything below in this function was given
 
         S=np.dot(np.dot(self.C, self.P), self.C.T) + self.R
             
@@ -40,24 +42,24 @@ class kalman_filter:
         
     
     # TODO Part 3: Implement here the measurement model
-    def measurement_model(self):
+    def measurement_model(self):  # C
         x, y, th, w, v, vdot = self.x
         return np.array([
-            ...,# v
-            ...,# w
-            ..., # ax
-            ..., # ay
+            v,# v
+            w,# w
+            vdot, # ax
+            w*v # ay
         ])
         
-    # TODO Part 3: Impelment the motion model (state-transition matrice)
-    def motion_model(self):
+    # TODO Part 3: Implement the motion model (state-transition matrix)
+    def motion_model(self):  # A
         
         x, y, th, w, v, vdot = self.x
         dt = self.dt
         
         self.x = np.array([
-            x + ... * np.cos(th) * dt,
-            y + ... * np.sin(th) * dt,
+            x + v * np.cos(th) * dt,
+            y + v * np.sin(th) * dt,
             th + w * dt,
             w,
             v  + vdot*dt,
@@ -67,14 +69,14 @@ class kalman_filter:
 
 
     
-    def jacobian_A(self):
+    def jacobian_A(self):  # A'
         x, y, th, w, v, vdot = self.x
         dt = self.dt
         
         return np.array([
             #x, y,               th, w,             v, vdot
-            [1, 0,              ..., 0,          ...,  0],
-            [0, 1,              ..., 0,          ...,  0],
+            [1, 0,              -v * np.sin(th) * dt, 0,         np.cos(th) * dt,  0],
+            [0, 1,               v * np.cos(th) * dt, 0,         np.sin(th) * dt,  0],
             [0, 0,                1, dt,           0,  0],
             [0, 0,                0, 1,            0,  0],
             [0, 0,                0, 0,            1,  dt],
@@ -83,16 +85,16 @@ class kalman_filter:
     
     
     # TODO Part 3: Implement here the jacobian of the H matrix (measurements)    
-    def jacobian_H(self):
+    def jacobian_H(self):  # C'
         x, y, th, w, v, vdot=self.x
         return np.array([
             #x, y,th, w, v,vdot
             [0,0,0  , 0, 1, 0], # v
             [0,0,0  , 1, 0, 0], # w
             [0,0,0  , 0, 0, 1], # ax
-            [0,0,0  , ..., ..., 0], # ay
+            [0,0,0  , v, w, 0], # ay
         ])
         
     # TODO Part 3: return the states here    
     def get_states(self):
-        return ...
+        return np.array(...)

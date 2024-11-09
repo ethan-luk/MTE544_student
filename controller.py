@@ -11,8 +11,6 @@ P=0; PD=1; PI=2; PID=3
 
 class controller:
     
-    
-    
     def __init__(self, klp=0.2, klv=0.2, kli=0.2, kap=0.2, kav=0.2, kai=0.2):
         
         self.PID_linear=PID_ctrl(PID, klp, klv, kli, filename_="linear.csv")
