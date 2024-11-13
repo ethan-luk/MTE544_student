@@ -50,10 +50,12 @@ class localization(Node):
         # x = [x, y, th, w, v, vdot]
         # x= np.array([[self.pose.pose.x, self.pose.pose.y, th, w, v, vdot]])
         x= np.array([[0, 0, 0, 0, 0, 0]])
+        
+        q_val = 0.5
+        Q= q_val*np.eye(6)
 
-        Q= 0.5*np.eye(6)
-
-        R= 0.5*np.eye(4)
+        r_val = 0.5
+        R= r_val*np.eye(4)
         
         P=Q # initial covariance
         
@@ -73,10 +75,11 @@ class localization(Node):
         # your measurements are the linear velocity and angular velocity from odom msg
         # and linear acceleration in x and y from the imu msg
         # the kalman filter should do a proper integration to provide x,y and filter ax,ay
-        z= np.array([imu_msg.linear_acceleration.x,
-                     imu_msg.linear_acceleration.y,
+        z= np.array([
                      odom_msg.twist.twist.linear.x,
-                     odom_msg.twist.twist.angular.z
+                     odom_msg.twist.twist.angular.z,
+                     imu_msg.linear_acceleration.x,
+                     imu_msg.linear_acceleration.y
         ])
         
         # Implement the two steps for estimation
@@ -91,12 +94,12 @@ class localization(Node):
         xhat=self.kf.get_states()
 
         # Update the pose estimate to be returned by getPose
-        self.pose=np.array(...)
+        self.pose=np.array[xhat[0], xhat[1], xhat[2], odom_msg.header.stamp]
 
         # TODO Part 4: log your data
         self.loc_logger.log_values([
-            z[0], # imu_ax
-            z[1], # imu_ay
+            z[2], # imu_ax
+            z[3], # imu_ay
             xhat[0], # kf_ax
             xhat[1] * xhat[2], # kf_ay = kf_vx * kf_w
             xhat[1], # kf_vx
