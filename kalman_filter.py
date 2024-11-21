@@ -97,4 +97,4 @@ class kalman_filter:
         
     # TODO Part 3: return the states here    
     def get_states(self):
-        return np.array(self.x)
+        return self.x
