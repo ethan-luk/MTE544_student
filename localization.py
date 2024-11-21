@@ -47,23 +47,23 @@ class localization(Node):
         # TODO Part 3: Set up the quantities for the EKF (hint: you will need the functions for the states and measurements)
         
         # x = [x, y, th, w, v, vdot]
-        # x= np.array([[self.pose.pose.x, self.pose.pose.y, th, w, v, vdot]])
         x= np.array([0, 0, 0, 0, 0, 0])
         
+        # Isolate constants for ease of tuning
         q_val = 0.05
         Q= q_val*np.eye(6)
 
         r_val = 0.05
         R= r_val*np.eye(4)
         
-        P=Q # initial covariance
+        P=Q # initial covariance set to Q as instructed in the tutorial
         
         self.kf=kalman_filter(P,Q,R, x, dt)
         
         # TODO Part 3: Use the odometry and IMU data for the EKF
-        self.odom_sub=message_filters.Subscriber(self, odom, '/odom', qos_profile=odom_qos) # not sure
+        self.odom_sub=message_filters.Subscriber(self, odom, '/odom', qos_profile=odom_qos)
         self.odom_sub.registerCallback(self.odom_callback)
-        self.imu_sub=message_filters.Subscriber(self, Imu, '/imu', qos_profile=odom_qos) # not sure
+        self.imu_sub=message_filters.Subscriber(self, Imu, '/imu', qos_profile=odom_qos) # can reuse odom qos profile since they're same settings
         
         time_syncher=message_filters.ApproximateTimeSynchronizer([self.odom_sub, self.imu_sub], queue_size=10, slop=0.1)
         time_syncher.registerCallback(self.fusion_callback)
@@ -87,10 +87,10 @@ class localization(Node):
 
         # Implement the two steps for estimation
         
-        # prediction step?
+        # prediction step
         self.kf.predict()
 
-        # update step?
+        # update step
         self.kf.update(z) # update based on the current set of measurements
         
         # Get the estimate [x, y, theta, w, v, vdot]
@@ -111,7 +111,7 @@ class localization(Node):
             xhat[3], # kf_w
             xhat[0], # kf_x
             xhat[1], # kf_y
-            Time.from_msg(imu_msg.header.stamp).nanoseconds, # stamp, not sure whether to use the odom_msg here or imu_msg... maybe neither...?
+            Time.from_msg(imu_msg.header.stamp).nanoseconds, # timestamp obtained from imu
         ])
       
     def odom_callback(self, pose_msg):

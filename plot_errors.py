@@ -17,7 +17,10 @@ def plot_errors(filename):
     
     fig, axes = plt.subplots(2,1, figsize=(14,10))
 
+    # code to create the 'ideal' spiral
     x, y = create_spiral()
+
+    # plotting code, added code to plot the odometry values from the robot
     axes[0].plot([lin[len(headers) - 3] for lin in values], [lin[len(headers) - 2] for lin in values], label='EKF Estimated')
     axes[0].plot([lin[len(headers) - 9] for lin in values], [lin[len(headers) - 8] for lin in values], label='Odom')
     #axes[0].plot(x, y, label='Ideal')
@@ -45,15 +48,16 @@ def plot_errors(filename):
 
     plt.show()
     
+    # calculating the error of the EKF - comparing odom to the ekf values that are outputted
     error_x = np.array([lin[len(headers) - 3] - lin[len(headers) - 9] for lin in values])
     error_y = np.array([lin[len(headers) - 2]  - lin[len(headers) - 8]for lin in values])
 
     total_error = np.sqrt(error_x**2 + error_y**2)
+    # calculate the error of the EKF over the first 200 time steps, for performance evaluation
+    total_error_first200 = np.sum(total_error[:200])
 
-    sample_array = np.arange(len(total_error))
 
-    error_integral = np.trapezoid(total_error, x=sample_array)
-
+    # plot the error values
     plt.title("EKF vs Odom Error, Q = 0.5, R = 0.05")
     plt.plot(error_x, label='x error')
     plt.plot(error_y, label='y error')
@@ -64,8 +68,9 @@ def plot_errors(filename):
     plt.ylabel("Error")
     plt.show()
     
-    print(f'Integral of error: {error_integral}')
+    print(f'Integral of error over first 200 samples: {total_error_first200}')
 
+# function to create the 'ideal' spiral, using the spiral trajectory planner as the basis
 def create_spiral():
     dt = 0.1
     curr_linearVelocity = 0
@@ -74,10 +79,6 @@ def create_spiral():
     theta = 0
     x = 0
     y = 0
-    # for i in range(0., 1.0, 0.1):
-    #     linearVelocity += 0.01 if linearVelocity < 1.0 else 0.0
-    #     x = x + linearVelocity * dt * np.cos(theta)
-        
 
     # Generate x and y coordinates
     linearVelocity = 0
