@@ -73,9 +73,9 @@ class localization(Node):
             
             # TODO PART 5 Bonus put the Q and R matrices
             # that you conclude from lab Three
-            Q=...
-            R=...
-            P=...
+            Q=0.05*np.eye(6) # From lab 3
+            R=5*np.eye(4) # From lab 3
+            P=Q
                         
             self.kf=kalman_filter(P,Q,R, x)
             
