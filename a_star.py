@@ -47,10 +47,10 @@ def return_path(current_node, maze):
     return path
 
 def get_euclidian_distance(pos0, pos1):
-    return sqrt((pos0[0] - pos1[0]) ** 2 + (pos0[1] - pos1[1]) ** 2)
+    return sqrt((pos0[0] - pos1[0]) ** 2 + (pos0[1] - pos1[1]) ** 2) # Equation for Euclidian distance between two points
 
 def get_manhattan_distance(pos0, pos1):
-    return abs(pos0[0] - pos1[0]) + abs(pos0[1] - pos1[1])
+    return abs(pos0[0] - pos1[0]) + abs(pos0[1] - pos1[1]) # Equation for Manhattan distance between two points
 
 def search(maze, start, end, heuristic):
 
@@ -75,11 +75,11 @@ def search(maze, start, end, heuristic):
     start_node.f = start_node.g + start_node.h
 
     end_node = Node(parent=None, position=end)
-    #end_node.g = end_node if end_node else float("inf")        # set a large value if not defined
     end_node.g = 1000 # set a large value if not defined
+
     # if at the end node, the cost to end node is 0
     end_node.h = 0       # heuristic estimated cost to end Node
-    end_node.f = end_node.g + end_node.h
+    end_node.f = end_node.g + end_node.h # f = g + h
 
     # Initialize both yet_to_visit and visited dictionary
     # in this dict we will put all node that are yet_to_visit for exploration.
@@ -190,7 +190,7 @@ def search(maze, start, end, heuristic):
 
             # TODO PART 4 Create the f, g, and h values
             if move in [[-1, -1], [1, -1], [-1, 1], [1, 1]]:
-                child.g = current_node.g + 1.414
+                child.g = current_node.g + 1.414 # 1.414 is the cost of diagonal movement, only used when heuristic is euclidian
             else:
                 child.g = current_node.g + 1
             # child.g = current_node.g + 1
