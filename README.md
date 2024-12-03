@@ -64,8 +64,10 @@ ros2 action send_goal /dock irobot_create_msgs/action/Dock {}
 - Source the .bashrc file: source ~/robohub/turtlebot4/configs/.bashrc
 - Declare ros2 domain: export ROS_DOMAIN_ID=X (X being the number of your robot)
 
-## Part 3 - Map aquisition (5 marks)
-Check the Excel sheet (will publish on Wed Nov. 27th) to see which entrance of the maze you have been assigned to and the time slots reserved for your group. There is a robot at each entrance. Use the robot at the entrance assigned to your group.
+## Part 3 - Map acquisition (5 marks)
+Check the [Excel sheet](https://uofwaterloo.sharepoint.com/:x:/s/tm-class-mte544fall2024-1054674-Teachingteam/ESkYeAUdxhJHq2fysmgquXwBlgaIz9pUFIL9pULrtZdvIQ?e=LP01lp) to see the time slots reserved for your group for mapping and then testing. Two groups will work at the same time due to time limitations. Choose one of the two entrances so that the two robots are each at a different one. Bring the robot to the dock at the entrance chosen, and then start your mapping/testing.
+
+You do not have to wait until your slot starts if the earlier slots have finished earlier, just start as soon as the previous groups are done.
 
 **Please try to finish within your allocated time.**
 
