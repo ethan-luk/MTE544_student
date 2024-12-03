@@ -149,6 +149,7 @@ class mapManipulator(Node):
         return self.res
     
     def cell_2_position(self, pix):
+        print(pix)
         i,j= pix
         return self.o_x + i*self.getResolution(),    (self.height - j) * self.getResolution()  + self.o_y  
     

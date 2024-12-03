@@ -75,7 +75,8 @@ def search(maze, start, end, heuristic):
     start_node.f = start_node.g + start_node.h
 
     end_node = Node(parent=None, position=end)
-    end_node.g = end_node if end_node else float("inf")       # set a large value if not defined
+    #end_node.g = end_node if end_node else float("inf")        # set a large value if not defined
+    end_node.g = 1000 # set a large value if not defined
     # if at the end node, the cost to end node is 0
     end_node.h = 0       # heuristic estimated cost to end Node
     end_node.f = end_node.g + end_node.h

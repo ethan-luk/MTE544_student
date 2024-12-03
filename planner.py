@@ -31,7 +31,7 @@ class planner:
         # TODO PART 5 Create the cost-map, the laser_sig is 
         # the standard deviation for the gausiian for which
         # the mean is located on the occupant grid. 
-        self.m_utilites=mapManipulator(laser_sig=0.1) # random standard deviation, change
+        self.m_utilites=mapManipulator(laser_sig=0.25) # random standard deviation, change
             
         self.costMap=self.m_utilites.make_likelihood_field()
         
@@ -49,10 +49,17 @@ class planner:
         
         # TODO PART 5 convert the cell pixels into the cartesian coordinates
         
-        path_output = search(self.costMap, startPose, endPose, heuristic = "euclidian")
-        
-        Path = list(map(self.m_utilites.cell_2_position(path_output)))
+        path_output = search(self.costMap, startPose, endPose, heuristic = "manhattan")
+        #path_output = search(self.m_utilites.getMap(), startPose, endPose, heuristic = "euclidian")
+        print(path_output)
 
+        '''Path = []
+        for coord in path_output:
+            Path.append(self.m_utilites.cell_2_position(coord))'''
+        #Path = list(map(self.m_utilites.cell_2_position(path_output)))
+        Path = list(map(self.m_utilites.cell_2_position, path_output))
+
+        print(Path)
 
 
         # TODO PART 5 return the path as list of [x,y]

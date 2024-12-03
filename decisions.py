@@ -43,11 +43,11 @@ class decision_maker(Node):
         publishing_period=1/rate
 
         # TODO PART 5 choose your threshold
-        self.reachThreshold=0.1 # chose arbitrarily
+        self.reachThreshold=0.25 # chose arbitrarily
 
         # TODO PART 5 your localization type
         # same as last lab might need to change, kalman filter or raw sensor
-        self.localizer=localization(type=kalmanFilter, dt=publishing_period)
+        self.localizer=localization(type=rawSensors)
 
 
         
